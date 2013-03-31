@@ -1,0 +1,14 @@
+.like:hover > a {
+	text-decoration: none;
+}
+
+input[type="text"] {
+	height: 30px;
+}
+
+.language {
+	border: 1 solid gray;
+	background-color: rgb(201, 201, 201);
+	font-size: 75%;
+	padding: 0px 5px;
+}
