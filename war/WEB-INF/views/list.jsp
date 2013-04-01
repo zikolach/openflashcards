@@ -36,7 +36,7 @@
 			<tr>
 				<td>
 					<b>
-						<a href="/flashcards/<%=flashcard.getId()%>">
+						<a href="/languages/<%=flashcard.getLanguage().getId() %>/flashcards/<%=flashcard.getId()%>">
 							<%=flashcard.getId()%>
 						</a>
 					</b>

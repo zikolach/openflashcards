@@ -60,14 +60,15 @@ public final class FlashcardsController {
 		return "index";
 	}
 
-	@RequestMapping(value = "/flashcards/{id}", method = RequestMethod.GET)
-	public String show(@PathVariable Long id, Model model) {
-		if (id == null)
+	@RequestMapping(value = "/languages/{languageId}/flashcards/{word}", method = RequestMethod.GET)
+	public String show(@PathVariable String languageId, @PathVariable String word, Model model) {
+		if (languageId == null || word == null || languageId.length() == 0 || word.length() == 0)
 			return "redirect:/flashcards";
-		List<Flashcard> flashcards = ofy().load().type(Flashcard.class)
-				.filterKey(Key.create(Flashcard.class, id)).list();
-		model.addAttribute("flashcards", flashcards);
-		return "flashcards";
+		Key<Language> languageKey = Key.create(Language.class, languageId);
+		Key<Flashcard> flashcardKey = Key.create(languageKey, Flashcard.class, word);
+		Flashcard flashcard = ofy().load().type(Flashcard.class).filterKey(flashcardKey).first().get();
+		model.addAttribute("flashcard", flashcard);
+		return "card";
 	}
 
 	@RequestMapping(value = "/flashcards", method = RequestMethod.POST)
