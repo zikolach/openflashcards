@@ -95,6 +95,7 @@ public class User {
 	public UserFlashcard findFlashcard(String word, String lang) {
 		Language l = FlashcardsService.getLanguage(lang);
 		UserLanguage ul = FlashcardsService.getUserLanguage (this, l);
+		if (ul == null) return null;
 		return FlashcardsService.getUserLanguageFlashcard(ul, word);
 	}
 

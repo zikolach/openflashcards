@@ -11,7 +11,7 @@
 	<div id="collapseOne" class="accordion-body collapse">
 		<div class="accordion-inner">
 
-			<form action="/flashcards" method="post" class="form-vertical">
+			<form id="add-form" action="/flashcards" method="post" class="form-vertical">
 				<fieldset>
 					<div>
 						<%

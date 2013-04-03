@@ -1,52 +1,42 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@page import="openflashcards.service.FlashcardsService"%>
+<%@page import="openflashcards.entity.User"%>
 <%@page import="openflashcards.entity.Translation"%>
+<%@page import="java.util.List"%>
 <%@page import="openflashcards.entity.Flashcard"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<html lang="en">
-<%@include file="head.jsp"%>
-<body>
-	<%@include file="header.jsp"%>
+<%
+{
+	@SuppressWarnings("unchecked")
+	List<String> filterTranslationLanguage =  (List<String>)request.getAttribute("filterTranslationLanguage");
+	User user = FlashcardsService.getCurrentUser();
+	
+%>
+
 	<%
-	{
-		User user = FlashcardsService.getCurrentUser();
+		Flashcard flashcard = (Flashcard)request.getAttribute("flashcard");
+		if (flashcard != null) {
+			List<Translation> translations = flashcard.getTranslations(filterTranslationLanguage);
 	%>
-	<div class="container">
-		<div class="row">
-			<div class="span12 flashcard">
-			<%
-				Flashcard flashcard = (Flashcard)request.getAttribute("flashcard");
-			%>
-				<div class="word">
-					<%= flashcard.getId() %>
-					<span class="language"><%= flashcard.getLanguage().getId() %></span>
-				</div>
-			<% 
-				if (user != null && user.findFlashcard(flashcard.getId(), flashcard.getLanguage().getId()) == null) { 
-			%>
-			<span class="btn btn-mini like">
-				<a class="icon-star" href="/users/<%= FlashcardsService.getCurrentUser().getId() %>/languages/<%=flashcard.getLanguage().getId() %>/flashcards/<%=flashcard.getId() %>">
-					&nbsp;
-				</a>
-			</span>
-			<%
-			}
-			%>	
-			
-			<%
-				for (Translation translation : flashcard.getTranslations()) {
-			%>
-				<div class="translation">
-					<%= translation.getText() %>
-					<span class="language"><%= translation.getLanguage().getId() %></span>
-				</div>
-			<%
-				}
-			%>
-			</div>
+	<div class="flashcard">
+		<div class="controls">
 		</div>
+		<div class="word">
+			<%=flashcard.getId()%>
+			<div class="language"><%=flashcard.getLanguage().getId()%></div>
+			
+		</div>
+		<% for (Translation translation : translations) { %>
+		<div class="translation">
+			<%=translation.getText()%>
+			<span class="language"><%=translation.getLanguage().getId()%></span>
+		</div>
+		<% } %>
 	</div>
-	<%
-	}
-	%>
-	<script type="text/javascript" src="/js/flashcards.js"></script>
-</body>
-</html>
+	<% } else { %>
+	Empty
+	<% } %>
+
+<%
+}
+%>

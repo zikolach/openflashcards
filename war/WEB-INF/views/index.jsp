@@ -19,7 +19,27 @@
 			<div class="span8">
 				<!--Body content-->
 				<div class="accordion" id="accordion2">
-					<%@include file="list.jsp"%>
+					<div class="accordion-group">
+						<div class="accordion-heading">
+							<button class="btn btn-block" type="button" data-toggle="collapse"
+								data-parent="#accordion2" data-target="#collapseFour">Filter results
+							</button>
+						</div>
+						<div id="collapseFour" class="accordion-body collapse">
+							<%@include file="list.jsp"%>
+						</div>
+					</div>
+					
+					<div class="accordion-group">
+						<div class="accordion-heading">
+							<button class="btn btn-block" type="button" data-toggle="collapse"
+								data-parent="#accordion2" data-target="#collapseFive">Selected flashcard
+							</button>
+						</div>
+						<div id="collapseFive" class="accordion-body collapse">
+							<%@include file="card.jsp"%>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
