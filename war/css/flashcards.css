@@ -12,6 +12,16 @@ input[type="text"] {
 
 .flashcard {
 	padding: 5px 20px;
+	position: relative;
+}
+
+.flashcard:before,.flashcard:after {
+	content: "";
+	display: table;
+}
+
+.flashcard:after {
+	clear: both;
 }
 
 .flashcard:nth-child(odd) {
@@ -23,9 +33,26 @@ input[type="text"] {
 }
 
 .flashcard .controls {
+	padding: 2px;
+	margin: 2px;
+	border: 1 dotted gray;
+}
+
+.flashcard .controls.vertical {
+	position: relative;
+	right: 0;
 	float: right;
-	width: 32px;
-	text-align: right;
+	width: 28px;
+	height: auto;
+	text-align: center;
+}
+
+.flashcard .controls.horizontal {
+	position: relative;
+	bottom: 0;
+	width: auto;
+	height: 28px;
+	text-align: left;
 }
 
 .word {
@@ -52,37 +79,101 @@ input[type="text"] {
 	margin-left: 10px;
 }
 
+.translation.closed:hover {
+	background-color: #eeeeee;
+}
+
+.panel-translation-edit {
+	border-left: 2 solid #aaaaaa;
+	display: none;
+	position: relative;
+	padding: 4px;
+}
+
+.tags {
+	margin-bottom: 4px;
+}
+
+.tag {
+	background-color: #f9f9f9;
+	border: 1 solid #dddddd;
+	border-radius: 6px;
+	cursor: pointer;
+	display: inline-block;
+	margin: 1px 0;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.btn-tag-remove {
+	display:inline-block;
+	cursor: pointer;
+	width: 9px;
+	height: 9px;
+	background: url('/img/glyphicons_207_remove_2.png') no-repeat;
+	opacity: 0.2;
+}
+
+.btn-tag-remove:hover {
+	opacity: 1.0 !important;
+}
+
 /* Actions, buttons etc */
 
 .action {
 	cursor: pointer;
 	display: inline-block;
-  	width: 24px;
-  	height: 24px;
   	vertical-align: text-top;
 	background-position: 0 0;
 	background-repeat: no-repeat;
 	opacity: 0.4;
-	/*
-	position: relative;
-	
-	*/
+	margin: 2px;
 }
 
-.action:hover {
+.action:hover, .action:focus, .action:active {
 	opacity: 1.0;
 }
 
 .action.like {
-	background-image: url("../img/glyphicons_343_thumbs_up.png");
+	background-image: url("../img/glyphicons_153_unchecked.png");
+	width: 22;
+	height: 18;
 }
 
 .action.dislike {
-	background-image: url("../img/glyphicons_344_thumbs_down.png");
+	background-image: url("../img/glyphicons_152_check.png");
+	width: 22;
+	height: 18;
 }
 
 .action.view {
 	background-image: url("../img/glyphicons_351_book_open.png");
+	width: 24;
+	height: 22;
+}
+
+.action.tags {
+	background-image: url("../img/glyphicons_150_edit.png");
+	width: 24;
+	height: 21;
+}
+
+.action.edittags {
+	background-image: url("../img/glyphicons_187_more.png");
+	width: 22px;
+	height: 6px;	
+}
+
+.show-tag-ed {
+	background-image: url("../img/glyphicons_224_chevron-left.png");
+	width: 15;
+	height: 22;
+}
+
+.hide-tag-ed {
+	background-image: url("../img/glyphicons_223_chevron-right.png");
+	width: 15;
+	height: 22;
 }
 
 .error {

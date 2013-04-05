@@ -1,5 +1,9 @@
 package openflashcards.entity;
 
+import java.util.List;
+
+import openflashcards.service.FlashcardsService;
+
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -44,4 +48,9 @@ public class Translation {
 								  .append(" text = ").append(text)
 								  .append(")").toString();
 	}
+	
+	public List<Tag> getUserTags(User u) {
+		return FlashcardsService.getUserTranslationTags(u, this);
+	}
+	
 }

@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import openflashcards.entity.Flashcard;
 import openflashcards.entity.Language;
+import openflashcards.entity.Tag;
 import openflashcards.entity.Translation;
 import openflashcards.entity.User;
 import openflashcards.entity.UserFlashcard;
@@ -28,6 +29,7 @@ public final class FlashcardsController {
 		ObjectifyService.register(Language.class);
 		ObjectifyService.register(UserLanguage.class);
 		ObjectifyService.register(UserFlashcard.class);	
+		ObjectifyService.register(Tag.class);
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)

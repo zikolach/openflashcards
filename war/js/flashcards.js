@@ -5,8 +5,8 @@ function toggleLike(elt) {
 	$.ajax(url, {
 		type: method,
 		success: function(result) {
-			elt.fadeToggle('fast').queue(function(next) {
-				elt.toggleClass("like").toggleClass("dislike").fadeToggle('fast');
+			elt.toggle().queue(function(next) {
+				elt.toggleClass("like").toggleClass("dislike").toggle();
 				next();
 			});
 		}
@@ -97,5 +97,55 @@ $(document).ready(function() {
 		e.preventDefault();
 		addFlashcard($(this));
 	});
+	$(document).on("click", ".action.tags", function(e) {
+		e.preventDefault();
+		alert("aaaa");
+		$("#tags-form").show();
+	});
+	$(document).on("click", ".translation", function(e) {
+		//$("#translation-edit").toggle();
+		e.preventDefault();
+		$(this).toggleClass("closed");
+		$(this).find(".panel-translation-edit ").slideToggle("fast");
+		
+	});
+	$(document).on("click", ".btn-tag-remove", function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		//alert("");
+		var tag = $(this).parent(); 
+		$.ajax(tag.data("url"), {
+			type: "DELETE",
+			success: function(result) {
+				tag.remove();
+			}
+		});
+		
+	})
+	$(document).on("click", ".tag", function(e) {
+		e.stopPropagation();
+		e.preventDefault();		
+	});
+	$(document).on("click", ".panel-translation-edit", function(e) {
+		e.stopPropagation();
+	});
+	$(document).on("submit", ".panel-translation-edit form", function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		var form = $(this);
+		$.ajax(form.attr("action"), {
+			type: form.attr("method"),
+			data: form.serialize(),
+			success: function(result) {
+				//alert(result);
+				form.closest(".panel-translation-edit ").find(".tags").append(result);
+			},
+			complete: function() {
+				form.find("input[name='tagName']").val("");
+			}
+		});
+		
+	});
+	
 });
 

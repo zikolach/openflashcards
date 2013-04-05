@@ -2,6 +2,7 @@ package openflashcards;
 
 import openflashcards.entity.Flashcard;
 import openflashcards.entity.Language;
+import openflashcards.entity.Tag;
 import openflashcards.entity.Translation;
 import openflashcards.entity.User;
 import openflashcards.entity.UserFlashcard;
@@ -26,9 +27,10 @@ public final class UserController {
 		ObjectifyService.register(Language.class);
 		ObjectifyService.register(UserLanguage.class);
 		ObjectifyService.register(UserFlashcard.class);
+		ObjectifyService.register(Tag.class);
 	}
 	
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	@RequestMapping(value = "/users/logout", method = RequestMethod.GET)
 	public String logout() {
 		FlashcardsService.logout();
 		return "redirect:/";
@@ -84,4 +86,33 @@ public final class UserController {
 		}
 		return "Success";
 	}
+	
+	@RequestMapping(value = "/users/{user}/tags", method = RequestMethod.POST)
+	public String addTag(@PathVariable String user, String language, String flashcard, Long translation, String tagName, Model model) {
+		if (user == null || translation == null || tagName == null ||
+		    user.length() == 0 || tagName.length() == 0)
+			return "error";
+		User currentUser = FlashcardsService.getCurrentUser();
+		if (!currentUser.getId().equals(user))
+			return "error";
+		
+		Tag tag = currentUser.addTag(language, flashcard, translation, tagName);
+		model.addAttribute("tag", tag);
+		
+		return "tag";
+	}
+	
+	@RequestMapping(value = "/users/{user}/tags/{tag}", method = RequestMethod.DELETE)
+	@ResponseBody public String deleteTag(@PathVariable String user, @PathVariable Long tag) {
+		if (user == null || tag == null || user.length() == 0)
+			return "error";
+		User currentUser = FlashcardsService.getCurrentUser();
+		if (!currentUser.getId().equals(user))
+			return "error";
+		
+		FlashcardsService.deleteTag(currentUser, tag);
+		
+		return "Success";
+	}
+	
 }

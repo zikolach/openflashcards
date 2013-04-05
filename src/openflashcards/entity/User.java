@@ -98,5 +98,10 @@ public class User {
 		if (ul == null) return null;
 		return FlashcardsService.getUserLanguageFlashcard(ul, word);
 	}
-
+	
+	public Tag addTag(String language, String flashcard, Long translation, String tagName) {
+		Tag tag = new Tag(this, FlashcardsService.getTranslation(language, flashcard, translation), tagName);
+		FlashcardsService.saveTag(tag);
+		return tag;
+	}
 }

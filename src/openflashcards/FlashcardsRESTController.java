@@ -3,6 +3,7 @@ package openflashcards;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import openflashcards.entity.Flashcard;
 import openflashcards.entity.Language;
+import openflashcards.entity.Tag;
 import openflashcards.entity.Translation;
 import openflashcards.entity.User;
 import openflashcards.entity.UserFlashcard;
@@ -27,6 +28,7 @@ public class FlashcardsRESTController {
 		ObjectifyService.register(Language.class);
 		ObjectifyService.register(UserLanguage.class);
 		ObjectifyService.register(UserFlashcard.class);
+		ObjectifyService.register(Tag.class);
 	}
 	
 	@RequestMapping(value = "/languages/{lang}/flashcards/{word}", method = RequestMethod.GET)

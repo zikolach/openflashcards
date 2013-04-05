@@ -8,6 +8,7 @@ import java.util.List;
 
 import openflashcards.entity.Flashcard;
 import openflashcards.entity.Language;
+import openflashcards.entity.Tag;
 import openflashcards.entity.Translation;
 import openflashcards.entity.User;
 import openflashcards.entity.UserFlashcard;
@@ -99,6 +100,12 @@ public class FlashcardsService {
 		return ofy().load().type(Translation.class).ancestor(flashcard).list();
 	}
 	
+	public static Translation getTranslation(String language, String flashcard, Long translation) {
+		Flashcard f = getFlashcard(flashcard, language);
+		Key<Translation> key = Key.create(Key.create(f), Translation.class, translation);
+		return ofy().load().key(key).get();
+	}
+	
 	public static void saveUser(User user) {
 		ofy().save().entities(user).now();
 	}
@@ -155,6 +162,19 @@ public class FlashcardsService {
 	
 	public static void deleteUserFlashcard(UserFlashcard userFlashcard) {
 		ofy().delete().entity(userFlashcard).now();
+	}
+	
+	public static List<Tag> getUserTranslationTags(User u, Translation t) {
+		if (u == null) return null;
+		return ofy().load().type(Tag.class).ancestor(u).filter("translation", t).list();
+	}
+	
+	public static void saveTag(Tag tag) {
+		ofy().save().entity(tag).now();
+	}
+	
+	public static void deleteTag(User u, Long t) {
+		ofy().delete().key(Key.create(Key.create(u), Tag.class, t)).now();
 	}
 
 }

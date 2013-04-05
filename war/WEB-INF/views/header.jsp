@@ -22,26 +22,16 @@
 					<li class="divider"></li>
 					<li><a
 						href="<%=UserServiceFactory.getUserService().createLogoutURL(
-						"/users/logout")%>">Sign
-							out</a></li>
+						"/users/logout")%>">Sign out</a></li>
 				</ul></li>
 
 		</ul>
-		<%
-			} else {
+		<%	} else {
 		%>
 		<ul class="nav pull-right">
-
-			<li><a
-				href="<%=UserServiceFactory.getUserService().createLoginURL(
-						"/")%>">Sign
-					in</a></li>
-
+			<li><a href="<%=UserServiceFactory.getUserService().createLoginURL("/")%>">Sign in</a></li>
 		</ul>
-		<%
-			}
-		%>
-
+		<% } %>
 
 	</div>
 </div>

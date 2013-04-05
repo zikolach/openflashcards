@@ -24,7 +24,7 @@
 			List<Translation> translations = flashcard.getTranslations(filterTranslationLanguage);
 			if (translations != null && translations.size() > 0) { %>
 			<div class="flashcard">
-				<div class="controls">
+				<div class="controls vertical">
 					<% if (user != null) {
 						String sel = (user.findFlashcard(flashcard.getId(), flashcard.getLanguage().getId()) == null) ? "like" : "dislike"; %>
 					<div class="action <%= sel %>" data-url="/users/<%= FlashcardsService.getCurrentUser().getId() %>/languages/<%=flashcard.getLanguage().getId() %>/flashcards/<%=flashcard.getId() %>"></div>
