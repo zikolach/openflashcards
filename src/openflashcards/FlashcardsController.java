@@ -42,6 +42,8 @@ public final class FlashcardsController {
 	public String list(@RequestParam(required=false) String filterWord, 
 					   @RequestParam(required=false) String[] filterWordLanguage, 
 					   @RequestParam(required=false) String[] filterTranslationLanguage,
+					   @RequestParam(required=false) String[] filterTranslationTag,
+					   @RequestParam(required=false) Integer filterLimit,
 					   Model model) {
 		if (filterWord != null)
 			model.addAttribute("filterWord", filterWord);
@@ -49,6 +51,10 @@ public final class FlashcardsController {
 			model.addAttribute("filterWordLanguage", Arrays.asList(filterWordLanguage));
 		if (filterTranslationLanguage != null)
 			model.addAttribute("filterTranslationLanguage", Arrays.asList(filterTranslationLanguage));
+		if (filterTranslationTag != null)
+			model.addAttribute("filterTranslationTag", Arrays.asList(filterTranslationTag));
+		
+		model.addAttribute("filterLimit", filterLimit);
 		
 		model.addAttribute("flashcards", FlashcardsService.findFlashcards(filterWord,  filterWordLanguage));
 		return "list";

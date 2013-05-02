@@ -9,6 +9,9 @@
 {
 	@SuppressWarnings("unchecked")
 	List<String> filterTranslationLanguage =  (List<String>)request.getAttribute("filterTranslationLanguage");
+	@SuppressWarnings("unchecked")
+	List<String> filterTranslationTag =  (List<String>)request.getAttribute("filterTranslationTag");
+	Integer filterLimit = (Integer)request.getAttribute("filterLimit");
 	User user = FlashcardsService.getCurrentUser();
 %>
 
@@ -20,9 +23,12 @@
 	}
 	else
 	{
+		int count = 0;
 		for (Flashcard flashcard : flashcards) {
-			List<Translation> translations = flashcard.getTranslations(filterTranslationLanguage);
-			if (translations != null && translations.size() > 0) { %>
+			if (count >= filterLimit) break;
+			List<Translation> translations = flashcard.getTranslations(filterTranslationLanguage, filterTranslationTag);
+			if (translations != null && translations.size() > 0) {
+				count++; %>
 			<div class="flashcard">
 				<div class="controls vertical">
 					<% if (user != null) {
@@ -34,7 +40,6 @@
 				<div class="word">
 					<%=flashcard.getId()%>
 					<div class="language"><%=flashcard.getLanguage().getId()%></div>
-					
 				</div>
 				<% for (Translation translation : translations) { %>
 				<div class="translation">
@@ -44,7 +49,6 @@
 				<% } %>
 			</div>
 	<% } } } %>
-
 
 <%
 }

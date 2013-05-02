@@ -4,7 +4,9 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.TreeSet;
 
 import openflashcards.entity.Flashcard;
 import openflashcards.entity.Language;
@@ -63,6 +65,7 @@ public class FlashcardsService {
 		return ofy().load().type(Flashcard.class).ancestor(language).filterKey(key).first().get();
 	}
 	
+	// looking for a word by text and filter translations by languages and tags
 	public static List<Flashcard> findFlashcards(String word, String[] langs) {
 		List<Language> languages = null;
 		// load languages
@@ -166,15 +169,30 @@ public class FlashcardsService {
 	
 	public static List<Tag> getUserTranslationTags(User u, Translation t) {
 		if (u == null) return null;
-		return ofy().load().type(Tag.class).ancestor(u).filter("translation", t).list();
+		return ofy().load().type(Tag.class).filter("user", u).filter("translation", t).list();
+	}
+	
+	public static Tag getTag(Long t) {
+		return ofy().load().key(Key.create(Tag.class, t)).get();
 	}
 	
 	public static void saveTag(Tag tag) {
 		ofy().save().entity(tag).now();
 	}
 	
-	public static void deleteTag(User u, Long t) {
-		ofy().delete().key(Key.create(Key.create(u), Tag.class, t)).now();
+	public static void deleteTag(Long t) {
+		ofy().delete().key(Key.create(Tag.class, t)).now();
 	}
+	
+	public static Collection<String> getUniqueTagNames() {
+		List<Tag> tags = ofy().load().type(Tag.class).list();
+		TreeSet<String> names = new TreeSet<String>();
+		for (Tag tag : tags) {
+			if (tag.getName() != null)
+				names.add(tag.getName());
+		}
+		return names;
+	}
+	
 
 }

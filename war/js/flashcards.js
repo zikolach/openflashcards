@@ -21,6 +21,12 @@ function loadFlashcard(elt) {
 			$("#collapseFive").html(result);
 			if (!$("#collapseFive").hasClass("in"))
 				$(".accordion-heading button[data-target=#collapseFive]").trigger("click");
+			var tags = $("input[name=\"filterTranslationTag\"]").map(function(index) {
+				return $(this).val();
+			}).get();
+			$( "input[name=\"tagName\"]" ).autocomplete({
+			  source: tags
+			});
 		}
 	});
 };
@@ -68,6 +74,7 @@ function addFlashcard(f) {
 		},
 		success: function(result) {
 			$("#collapseFive").html(result);
+				
 		},
 		error: function() {
 			$("#collapseFive").html("<div class=\"error\">Error occurred</div>");
@@ -76,6 +83,36 @@ function addFlashcard(f) {
 			if (refresh)
 				$(".accordion-heading button[data-target=#collapseFive]").trigger("click");
 			$(f).find("button").attr("disabled",false);
+		}
+	});
+};
+
+function addTag(f) {
+	if (f.find("input[name=\"tagName\"]").first().val().length == 0) return;
+	$.ajax(f.attr("action"), {
+		type: f.attr("method"),
+		data: f.serialize(),
+		success: function(result) {
+			//alert(result);
+			f.closest(".panel-translation-edit ").find(".tags").append(result);
+		},
+		complete: function() {
+			var inputTag = f.find("input[name='tagName']");
+			var check = $("#filterTags input[name=\"filterTranslationTag\"]").filter(function() {
+				return $(this).val() == inputTag.val();
+			});
+			if (check.size() == 0)
+				$("#filterTags").append("<label class=\"checkbox\"><input type=\"checkbox\" name=\"filterTag\" value=\"" + inputTag.val() + "\"> " + inputTag.val() + "</label>");
+			inputTag.val("");
+		}
+	});
+};
+
+function removeTag(t) {
+	$.ajax(t.data("url"), {
+		type: "DELETE",
+		success: function(result) {
+			t.remove();
 		}
 	});
 };
@@ -89,62 +126,41 @@ $(document).ready(function() {
 		e.preventDefault();
 		loadFlashcard($(this));
 	});
+	// load flashcards
 	$("#search-form").on("submit", function(e) {
 		e.preventDefault();
 		loadFlashcards($(this));
 	});
+	// add flashcard
 	$("#add-form").on("submit", function(e) {
 		e.preventDefault();
 		addFlashcard($(this));
 	});
+	// translations edit button
 	$(document).on("click", ".action.tags", function(e) {
 		e.preventDefault();
-		alert("aaaa");
-		$("#tags-form").show();
+		//$("#tags-form").show();
 	});
-	$(document).on("click", ".translation", function(e) {
-		//$("#translation-edit").toggle();
+	// expand translation edit form
+	$(document).on("click", "#collapseFive .translation", function(e) {
 		e.preventDefault();
 		$(this).toggleClass("closed");
 		$(this).find(".panel-translation-edit ").slideToggle("fast");
 		
 	});
+	// tag remove button
 	$(document).on("click", ".btn-tag-remove", function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		//alert("");
-		var tag = $(this).parent(); 
-		$.ajax(tag.data("url"), {
-			type: "DELETE",
-			success: function(result) {
-				tag.remove();
-			}
-		});
-		
-	})
-	$(document).on("click", ".tag", function(e) {
-		e.stopPropagation();
-		e.preventDefault();		
+		e.stopPropagation(); e.preventDefault();
+		removeTag($(this).parent());
 	});
 	$(document).on("click", ".panel-translation-edit", function(e) {
 		e.stopPropagation();
 	});
+	// add tag
 	$(document).on("submit", ".panel-translation-edit form", function(e) {
 		e.stopPropagation();
 		e.preventDefault();
-		var form = $(this);
-		$.ajax(form.attr("action"), {
-			type: form.attr("method"),
-			data: form.serialize(),
-			success: function(result) {
-				//alert(result);
-				form.closest(".panel-translation-edit ").find(".tags").append(result);
-			},
-			complete: function() {
-				form.find("input[name='tagName']").val("");
-			}
-		});
-		
+		addTag($(this));
 	});
 	
 });

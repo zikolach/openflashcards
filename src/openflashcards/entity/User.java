@@ -104,4 +104,15 @@ public class User {
 		FlashcardsService.saveTag(tag);
 		return tag;
 	}
+	
+	public boolean equals(Object that) {
+		if (that == null)
+			return false;
+		if (that.getClass() != this.getClass())
+			return false;
+		User l = (User) that;
+		if (this.id.equals(l.id))
+			return true;
+		return false;
+	}
 }

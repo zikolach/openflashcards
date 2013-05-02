@@ -110,7 +110,12 @@ public final class UserController {
 		if (!currentUser.getId().equals(user))
 			return "error";
 		
-		FlashcardsService.deleteTag(currentUser, tag);
+		Tag t = FlashcardsService.getTag(tag);
+		
+		if (!t.getUser().equals(currentUser))
+			return "error";
+			
+		FlashcardsService.deleteTag(tag);
 		
 		return "Success";
 	}

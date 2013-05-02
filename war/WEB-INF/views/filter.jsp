@@ -1,3 +1,4 @@
+<%@page import="java.util.Collection"%>
 <%@page import="openflashcards.service.FlashcardsService"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.List"%>
@@ -39,6 +40,20 @@
 					<% for (Language lang : FlashcardsService.getLanguages()) { %>
 						<label class="checkbox"><input type="checkbox" name="filterTranslationLanguage" value="<%= lang.getId() %>"> <%= lang.getName() %></label>
 					<% } %>
+					</div>
+				</div>
+
+				<!-- tag filter -->
+				<div class="control-group">
+					<label class="control-label" for="filterLimit">Tags</label>
+					<div id="filterTags" class="controls" style="border: 1 solid #cccccc; padding: 0 10px; overflow: scroll; max-height: 200px; ">
+					<% Collection<String> tagNmaes = FlashcardsService.getUniqueTagNames();
+					   if (tagNmaes.size() == 0) { %>
+					   <div style="text-align: center;">no tags</div>
+					<% } else {
+							for (String name : tagNmaes) { %>
+						<label class="checkbox"><input type="checkbox" name="filterTranslationTag" value="<%= name %>"> <%= name %></label>
+					<% } } %>
 					</div>
 				</div>
 				

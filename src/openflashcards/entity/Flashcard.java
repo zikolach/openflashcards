@@ -49,6 +49,31 @@ public class Flashcard {
 		return result;
 	}
 
+	public List<Translation> getTranslations(List<String> filterLanguage, List<String> filterTags) {
+		List<Translation> list = FlashcardsService.getTranslations(this);
+		ArrayList<Translation> result = new ArrayList<Translation>();
+		User u = FlashcardsService.getCurrentUser();
+		for (Translation tr : list) {
+			if (filterLanguage == null || filterLanguage.contains(tr.getLanguage().getId())) {
+				boolean tagCheck = false;
+				if (filterTags != null) {
+					List<Tag> tags = tr.getUserTags(u);
+					if (tags != null)
+						for (Tag tag : tags)
+							if (filterTags.contains(tag.name)) {
+								tagCheck = true;
+								break;
+							}
+				}
+				else
+					tagCheck = true;
+				if (tagCheck)
+					result.add(tr);
+			}
+		}
+		return result;
+	}
+	
 	public void addTranslation(String text, Language language) {
 		if (text != null && !text.equals("")) {
 			Translation translation = new Translation(this, text, language);

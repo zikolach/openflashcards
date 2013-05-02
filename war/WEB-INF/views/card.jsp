@@ -6,18 +6,14 @@
 <%@page import="openflashcards.entity.Translation"%>
 <%@page import="java.util.List"%>
 <%@page import="openflashcards.entity.Flashcard"%>
-<%
-{
+<% {
 	@SuppressWarnings("unchecked")
 	List<String> filterTranslationLanguage =  (List<String>)request.getAttribute("filterTranslationLanguage");
 	User user = FlashcardsService.getCurrentUser();
 	
-%>
-
-	<%
-		Flashcard flashcard = (Flashcard)request.getAttribute("flashcard");
-		if (flashcard != null) {
-			List<Translation> translations = flashcard.getTranslations(filterTranslationLanguage);
+	Flashcard flashcard = (Flashcard)request.getAttribute("flashcard");
+	if (flashcard != null) {
+		List<Translation> translations = flashcard.getTranslations(filterTranslationLanguage);
 	%>
 	<div class="flashcard">
 		<div class="word">
@@ -29,11 +25,11 @@
 		<div class="translation closed">
 			<%=translation.getText()%>
 			<span class="language"><%=translation.getLanguage().getId()%></span>
-
+			<% if (user != null) { %>
 			<div class="panel-translation-edit">
 				<div class="tags">
 				<% for (Tag tag : translation.getUserTags(user)) { %>
-					<div class="tag" data-url="/users/<%= user.getId() %>/tags/<%= tag.getId() %>"> <%= tag.getTagName() %> <div class="btn-tag-remove"></div></div>
+					<div class="tag" data-url="/users/<%= user.getId() %>/tags/<%= tag.getId() %>"> <%= tag.getName() %> <div class="btn-tag-remove"></div></div>
 			 	<% } %>
 			 	</div>
 			 	<form class="form-inline" method="post" action="/users/<%= user.getId() %>/tags">
@@ -44,7 +40,7 @@
 					<button type="submit" class="btn btn-primary">Add tag</button>
 				</form>
 			</div>
-
+			<% } %>
 		</div>
 		<% } %>
 		
@@ -54,10 +50,6 @@
 		<div id="tags-form">
 		</div>
 	</div>
-	<% } else { %>
+<% } else { %>
 	Empty
-	<% } %>
-
-<%
-}
-%>
+<% }  } %>
