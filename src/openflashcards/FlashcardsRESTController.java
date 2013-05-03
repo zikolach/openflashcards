@@ -1,6 +1,9 @@
 package openflashcards;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
+
+import java.util.logging.Logger;
+
 import openflashcards.entity.Flashcard;
 import openflashcards.entity.Language;
 import openflashcards.entity.Tag;
@@ -15,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.util.UriUtils;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
@@ -30,6 +34,8 @@ public class FlashcardsRESTController {
 		ObjectifyService.register(UserFlashcard.class);
 		ObjectifyService.register(Tag.class);
 	}
+	
+	static Logger log = Logger.getLogger(FlashcardsRESTController.class.getName());
 	
 	@RequestMapping(value = "/languages/{lang}/flashcards/{word}", method = RequestMethod.GET)
 	public String show(@PathVariable String lang, @PathVariable String word, Model model) {
@@ -65,8 +71,10 @@ public class FlashcardsRESTController {
 				UserFlashcard uf = FlashcardsService.getUserLanguageFlashcard(ul, word);
 				if (uf == null) ul.addFlashcard(word);
 			}
+			model.addAttribute("flashcard", flashcard);
 		}
-		return "redirect:/languages/" + lang + "/flashcards/" + word;
+		return "card";
+		//return "redirect:/languages/" + lang + "/flashcards/" + word;
 	}
 	
 }
